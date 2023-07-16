@@ -21,3 +21,27 @@ For example, how much does this basket of books cost?
 = 160 EUR + 160 EUR
 
 = 320 EUR.
+
+To execute the project, you can follow these steps:
+
+Ensure that you have all the necessary dependencies and configurations set up in your Spring Boot application.
+
+Make sure you have the required dependencies in your pom.xml file. You should have dependencies for Spring Web MVC, Spring Boot Starter Test, and any other dependencies required for your project.
+
+Create the necessary classes for your application, including the controller, service, model, and exception classes.
+
+Implement the business logic in the service class and handle exceptions accordingly.
+
+Configure your application properties or application.yaml file with the necessary settings.
+
+Create unit tests for your controller and service classes to ensure that they are functioning correctly.
+
+Run the application by executing the main() method in the main class of your Spring Boot application.
+
+Use tools like Postman to send requests to the defined endpoints and verify the responses.
+
+Use the provided test cases to validate the functionality of your application. You can run the tests using a testing framework like JUnit.
+
+Review the test results and ensure that all tests pass successfully.
+
+Make any necessary adjustments or improvements based on your requirements and retest as needed.
