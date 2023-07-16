@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.kata.developmentbookstore.constants.BookstoreConstants;
+import com.kata.developmentbookstore.controller.BookController;
 import com.kata.developmentbookstore.model.Book;
 import com.kata.developmentbookstore.model.BookInfo;
 
@@ -14,14 +17,17 @@ import com.kata.developmentbookstore.model.BookInfo;
 public class BookServiceImpl implements BookService {
 
 	public static final double BASE_PRICE = 50.0;
+	private static final Logger logger = LoggerFactory.getLogger(BookServiceImpl.class);
 	public List<BookInfo> books;
 
 	@Override
 	public List<BookInfo> getAllBooks() {
+		logger.info("Fetching all books");
 		return books;
 	}
 
 	public double calculateTotalPrice(List<Book> selectedBooks) {
+		logger.info("Calculating total price");
 		if (selectedBooks != null && selectedBooks.isEmpty()) {
 			return BookstoreConstants.ZERO;
 		}
