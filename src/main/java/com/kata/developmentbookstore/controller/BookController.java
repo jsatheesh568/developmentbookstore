@@ -1,6 +1,7 @@
 package com.kata.developmentbookstore.controller;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ public class BookController {
 		logger.info("Received request to calculate total price");
 
 		if (books == null || books.isEmpty()) {
-			return ResponseEntity.badRequest().body("The cart is empty.");
+			 return ResponseEntity.badRequest().body(Collections.singletonMap("message", "The cart is empty"));
 		}
 
 		if (bindingResult.hasErrors()) {
