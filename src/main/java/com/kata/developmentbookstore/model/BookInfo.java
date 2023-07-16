@@ -2,9 +2,10 @@ package com.kata.developmentbookstore.model;
 
 public enum BookInfo {
 
-	CLEAN_CODE("Clean Code", "Robert Martin", 2008),
+	CLEAN_CODE("Clean Code", "Robert Martin", 2008), 
 	CLEAN_CODER("Clean Coder", "Robert Martin", 2011),
-	CLEAN_ARCHITECTURE("Clean Architecture", "Robert Martin", 2017);
+	CLEAN_ARCHITECTURE("Clean Architecture", "Robert Martin", 2017),
+	TDD_BY_EXAMPLE("Test Driven Development by Example", "Kent Beck", 2003);
 	
 	private String title;
 	private String author;
