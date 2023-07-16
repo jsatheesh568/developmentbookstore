@@ -50,6 +50,9 @@ public class BookServiceImpl implements BookService {
 				totalPrice += (completeBookSetsCount * (3 * BASE_PRICE * (1 - 10.0 / 100.0)))
 						+ (additionalBooks * BASE_PRICE);
 			}
+		} else if (distinctBooksInCart == 5) {
+			totalPrice += (2 * (4 * BASE_PRICE * (1 - 20.0 / 100.0)))
+					+ (totalBooksInCart - 8) * BASE_PRICE * (1 - 20.0 / 100.0);
 		} else {
 			return totalPrice = totalBooksInCart * BASE_PRICE;
 		}
