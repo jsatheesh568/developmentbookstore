@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,11 +22,17 @@ import com.kata.developmentbookstore.service.BookService;
 class DevlopmentBookStoreApplicationTests {
 	
 	@Mock
-	private BookService bookService = Mockito.mock(BookService.class);
+	private BookService bookService;
 
 	@Autowired
-	private MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new BookController(bookService)).build();
+	private MockMvc mockMvc;
 
+	@BeforeEach
+	public void setup() {
+		bookService = Mockito.mock(BookService.class);
+		mockMvc = MockMvcBuilders.standaloneSetup(new BookController(bookService)).build();
+	}
+	
 	@Test
 	public void testGetAllBooksEndpoint() throws Exception {
 		ResultActions result = mockMvc.perform(get("/getAllBooks").accept(MediaType.APPLICATION_JSON));

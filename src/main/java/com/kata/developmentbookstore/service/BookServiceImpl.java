@@ -26,8 +26,7 @@ public class BookServiceImpl implements BookService {
 		}
 		double totalPrice = 0.0;
 		int totalBooksInCart = selectedBooks.size();
-		totalPrice = totalBooksInCart * 50;
-		return totalPrice;
+		return totalPrice = totalBooksInCart * 50;		
 	}
 
 }

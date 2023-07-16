@@ -3,6 +3,7 @@ package com.kata.developmentbookstore.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,13 +28,8 @@ public class BookController {
     }
 	
 	@PostMapping("/calculateTotalPrice")
-	public double calculateTotalPrice(@RequestBody List<Book> selectedBooks) {
-		if (selectedBooks == null || selectedBooks.isEmpty()) {
-			return 0.0;
-		}
-		double totalPrice = 0.0;
-		int totalBooksInCart = selectedBooks.size();
-		totalPrice = totalBooksInCart * 50;
-		return totalPrice;
+	public ResponseEntity<Double> calculateTotalPrice(@RequestBody List<Book> books) {
+		double totalPrice = bookService.calculateTotalPrice(books);
+	    return ResponseEntity.ok(totalPrice);
 	}
 }
