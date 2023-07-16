@@ -3,9 +3,12 @@ package com.kata.developmentbookstore.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +19,7 @@ import com.kata.developmentbookstore.model.BookInfo;
 import com.kata.developmentbookstore.service.BookService;
 
 @RestController
+@Validated
 public class BookController {
 
 	private final BookService bookService;
@@ -32,7 +36,7 @@ public class BookController {
 	}
 
 	@PostMapping("/calculateTotalPrice")
-	public ResponseEntity<Double> calculateTotalPrice(@RequestBody List<Book> books) {
+	public ResponseEntity<Double> calculateTotalPrice(@Valid @RequestBody List<Book> books) {
 		logger.info("Received request to calculate total price");
 		double totalPrice = bookService.calculateTotalPrice(books);
 		logger.info("Total price calculated: {}", totalPrice);
