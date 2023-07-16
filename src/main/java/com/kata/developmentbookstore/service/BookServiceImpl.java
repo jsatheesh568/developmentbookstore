@@ -44,6 +44,11 @@ public class BookServiceImpl implements BookService {
 		} else if (distinctBooksInCart == 4) {
 			if (totalBooksInCart % 4 == 0) {
 				totalPrice += (totalBooksInCart / 4) * (4 * BASE_PRICE * (1 - 20.0 / 100.0));
+			} else {
+				int completeBookSetsCount = totalBooksInCart / 4;
+				int additionalBooks = totalBooksInCart % 4;
+				totalPrice += (completeBookSetsCount * (3 * BASE_PRICE * (1 - 10.0 / 100.0)))
+						+ (additionalBooks * BASE_PRICE);
 			}
 		} else {
 			return totalPrice = totalBooksInCart * BASE_PRICE;
