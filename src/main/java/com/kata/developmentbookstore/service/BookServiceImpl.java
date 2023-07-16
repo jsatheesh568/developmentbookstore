@@ -12,9 +12,9 @@ import com.kata.developmentbookstore.model.BookInfo;
 @Service
 public class BookServiceImpl implements BookService {
 
-	public static final double BASE_PRICE= 50.0;
+	public static final double BASE_PRICE = 50.0;
 	public List<BookInfo> books;
-	
+
 	@Override
 	public List<BookInfo> getAllBooks() {
 		return books;
@@ -23,20 +23,24 @@ public class BookServiceImpl implements BookService {
 	public double calculateTotalPrice(List<Book> selectedBooks) {
 		if (selectedBooks != null && selectedBooks.isEmpty()) {
 			return 0.0;
-		}	
+		}
 		Map<String, Integer> bookCounts = new HashMap<>();
 
 		for (Book book : selectedBooks) {
-		    String title = book.getTitle();
-		    int count = bookCounts.getOrDefault(title, 0);
-		    bookCounts.put(title, count + 1);
+			String title = book.getTitle();
+			int count = bookCounts.getOrDefault(title, 0);
+			bookCounts.put(title, count + 1);
 		}
 
 		int distinctBooksInCart = bookCounts.size();
 		int totalBooksInCart = selectedBooks.size();
 		double totalPrice = 0.0;
-		return totalPrice = totalBooksInCart * BASE_PRICE;
-		
+		if (totalBooksInCart == 5 && distinctBooksInCart == 5) {
+			totalPrice += totalBooksInCart * BASE_PRICE * (1 - 25.0 / 100.0);
+		} else {
+			return totalPrice = totalBooksInCart * BASE_PRICE;
+		}
+		return totalPrice;
 	}
 
 }
