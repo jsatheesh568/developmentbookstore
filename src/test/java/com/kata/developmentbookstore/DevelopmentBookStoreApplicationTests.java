@@ -23,7 +23,7 @@ import com.kata.developmentbookstore.controller.BookController;
 import com.kata.developmentbookstore.service.BookService;
 
 class DevelopmentBookStoreApplicationTests {
-	
+
 	@Mock
 	private BookService bookService;
 
@@ -35,15 +35,15 @@ class DevelopmentBookStoreApplicationTests {
 		bookService = Mockito.mock(BookService.class);
 		mockMvc = MockMvcBuilders.standaloneSetup(new BookController(bookService)).build();
 	}
-	
+
 	@Test
 	public void testGetAllBooksEndpoint() throws Exception {
 		ResultActions result = mockMvc.perform(get("/getAllBooks").accept(MediaType.APPLICATION_JSON));
-				result.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-						.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$[0]").value("CLEAN_CODE"))
-						.andExpect(jsonPath("$[1]").value("CLEAN_CODER"));
-		}
-	
+		result.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$[0]").value("CLEAN_CODE"))
+				.andExpect(jsonPath("$[1]").value("CLEAN_CODER"));
+	}
+
 	@Test
 	public void testSingleBookPrice() throws Exception {
 		double expectedPrice = 50.0;
@@ -52,7 +52,7 @@ class DevelopmentBookStoreApplicationTests {
 				.content("[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008}]"))
 				.andExpect(status().isOk()).andExpect(content().string("50.0"));
 	}
-	
+
 	@Test
 	public void testEmptyCart_ShouldCheckEmptyCart() throws Exception {
 		Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(0.0);
@@ -61,38 +61,45 @@ class DevelopmentBookStoreApplicationTests {
 		String responseBody = result.getResponse().getContentAsString();
 		Assertions.assertEquals("0.0", responseBody);
 	}
-	
+
 	@Test
-	public void testCalculateTotalBookPrice() throws Exception{
-	Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(250.0);
-	mockMvc.perform(
+	public void testCalculateTotalBookPrice() throws Exception {
+		Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(250.0);
+		mockMvc.perform(
 				MockMvcRequestBuilders.post("/calculateTotalPrice").contentType(MediaType.APPLICATION_JSON).content(
 						"[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},{\"title\":\"Clean Coder\",\"author\":\"Robert Martin\",\"year\":2011},{\"title\":\"Test Driven Development by Example\",\"author\":\"Kent Beck\",\"year\":2003},{\"title\":\"Working effectively with Legacy Code\",\"author\":\"Michael C. Feathers\",\"year\":2004}]"))
 				.andExpect(status().isOk()).andExpect(content().json("250.0"));
 	}
-	
+
 	@Test
 	public void testCalculateTotalBookPrice_AllDifferentBooks() throws Exception {
-	Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(187.5);
-	mockMvc.perform(
+		Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(187.5);
+		mockMvc.perform(
 				MockMvcRequestBuilders.post("/calculateTotalPrice").contentType(MediaType.APPLICATION_JSON).content(
 						"[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},{\"title\":\"Clean Coder\",\"author\":\"Robert Martin\",\"year\":2011},{\"title\":\"Test Driven Development by Example\",\"author\":\"Kent Beck\",\"year\":2003},{\"title\":\"Working effectively with Legacy Code\",\"author\":\"Michael C. Feathers\",\"year\":2004}]"))
 				.andExpect(status().isOk()).andExpect(content().json("187.5"));
 	}
-	
 
 	@Test
 	public void testCalculateTotalPrice_AllBooksSame() throws Exception {
 		Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(250.0);
 		String content = "[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},"
-		        + "{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},"
-		        + "{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},"
-		        + "{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},"
-		        + "{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008}]";
-mockMvc.perform(MockMvcRequestBuilders.post("/calculateTotalPrice").contentType(MediaType.APPLICATION_JSON)
+				+ "{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},"
+				+ "{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},"
+				+ "{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},"
+				+ "{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008}]";
+		mockMvc.perform(MockMvcRequestBuilders.post("/calculateTotalPrice").contentType(MediaType.APPLICATION_JSON)
 				.content(content)).andExpect(status().isOk()).andExpect(jsonPath("$").value(250.0))
 				.andExpect(jsonPath("$").exists());
 	}
+
+	@Test
+	public void testCalculateTotalPrice_TwoDifferentBooksWithFivePercentDiscount() throws Exception {
+		Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(95.0);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/calculateTotalPrice").contentType(MediaType.APPLICATION_JSON).content(
+						"[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},{\"title\":\"Clean Coder\",\"author\":\"Robert Martin\",\"year\":2011}]"))
+				.andExpect(status().isOk()).andExpect(content().json("95.0"));
+	}
 }
-
-
