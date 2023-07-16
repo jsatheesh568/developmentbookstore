@@ -1,9 +1,10 @@
 package com.kata.developmentbookstore.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.kata.developmentbookstore.model.Book;
 import com.kata.developmentbookstore.model.BookInfo;
@@ -11,6 +12,7 @@ import com.kata.developmentbookstore.model.BookInfo;
 @Service
 public class BookServiceImpl implements BookService {
 
+	public static final double BASE_PRICE= 50.0;
 	public List<BookInfo> books;
 	
 	@Override
@@ -18,15 +20,23 @@ public class BookServiceImpl implements BookService {
 		return books;
 	}
 
-	@Override
-	@PostMapping("/calculateTotalPrice")
 	public double calculateTotalPrice(List<Book> selectedBooks) {
-		if (selectedBooks == null || selectedBooks.isEmpty()) {
+		if (selectedBooks != null && selectedBooks.isEmpty()) {
 			return 0.0;
+		}	
+		Map<String, Integer> bookCounts = new HashMap<>();
+
+		for (Book book : selectedBooks) {
+		    String title = book.getTitle();
+		    int count = bookCounts.getOrDefault(title, 0);
+		    bookCounts.put(title, count + 1);
 		}
-		double totalPrice = 0.0;
+
+		int distinctBooksInCart = bookCounts.size();
 		int totalBooksInCart = selectedBooks.size();
-		return totalPrice = totalBooksInCart * 50;		
+		double totalPrice = 0.0;
+		 totalPrice = totalBooksInCart * BASE_PRICE;
+		return totalPrice;
 	}
 
 }
