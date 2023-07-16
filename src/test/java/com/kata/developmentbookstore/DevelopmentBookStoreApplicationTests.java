@@ -102,4 +102,14 @@ class DevelopmentBookStoreApplicationTests {
 						"[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},{\"title\":\"Clean Coder\",\"author\":\"Robert Martin\",\"year\":2011}]"))
 				.andExpect(status().isOk()).andExpect(content().json("95.0"));
 	}
+
+	@Test
+	public void testCalculateTotalPrice_ThreeDifferentBooksWithTenPercentDiscount() throws Exception {
+		Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(135.0);
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/calculateTotalPrice").contentType(MediaType.APPLICATION_JSON).content(
+						"[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},{\"title\":\"Clean Coder\",\"author\":\"Robert Martin\",\"year\":2011},{\"title\":\"Clean Architecture\",\"author\":\"Robert Martin\",\"year\":2017}]"))
+				.andExpect(status().isOk()).andExpect(content().json("135.0"));
+	}
 }
