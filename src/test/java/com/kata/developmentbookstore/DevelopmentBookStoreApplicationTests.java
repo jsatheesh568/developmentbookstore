@@ -80,6 +80,7 @@ class DevelopmentBookStoreApplicationTests {
 				.andExpect(status().isOk()).andExpect(content().json("187.5"));
 	}
 	
+
 	@Test
 	public void testCalculateTotalPrice_AllBooksSame() throws Exception {
 		Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(250.0);
@@ -92,7 +93,6 @@ mockMvc.perform(MockMvcRequestBuilders.post("/calculateTotalPrice").contentType(
 				.content(content)).andExpect(status().isOk()).andExpect(jsonPath("$").value(250.0))
 				.andExpect(jsonPath("$").exists());
 	}
-	
 }
 
 
