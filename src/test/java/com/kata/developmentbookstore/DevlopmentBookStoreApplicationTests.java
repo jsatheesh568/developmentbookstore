@@ -70,6 +70,16 @@ class DevlopmentBookStoreApplicationTests {
 						"[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},{\"title\":\"Clean Coder\",\"author\":\"Robert Martin\",\"year\":2011},{\"title\":\"Test Driven Development by Example\",\"author\":\"Kent Beck\",\"year\":2003},{\"title\":\"Working effectively with Legacy Code\",\"author\":\"Michael C. Feathers\",\"year\":2004}]"))
 				.andExpect(status().isOk()).andExpect(content().json("250.0"));
 	}
+	
+	@Test
+	public void testCalculateTotalBookPrice_AllDifferentBooks() throws Exception {
+	Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(187.5);
+	mockMvc.perform(
+				MockMvcRequestBuilders.post("/calculateTotalPrice").contentType(MediaType.APPLICATION_JSON).content(
+						"[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008},{\"title\":\"Clean Coder\",\"author\":\"Robert Martin\",\"year\":2011},{\"title\":\"Test Driven Development by Example\",\"author\":\"Kent Beck\",\"year\":2003},{\"title\":\"Working effectively with Legacy Code\",\"author\":\"Michael C. Feathers\",\"year\":2004}]"))
+				.andExpect(status().isOk()).andExpect(content().json("187.5"));
+	}
+	
 }
 
 
