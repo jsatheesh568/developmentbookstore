@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -13,7 +14,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.kata.developmentbookstore.controller.BookController;
@@ -48,6 +51,15 @@ class DevlopmentBookStoreApplicationTests {
 		mockMvc.perform(post("/calculateTotalPrice").contentType(MediaType.APPLICATION_JSON)
 				.content("[{\"title\":\"Clean Code\",\"author\":\"Robert Martin\",\"year\":2008}]"))
 				.andExpect(status().isOk()).andExpect(content().string("50.0"));
+	}
+	
+	@Test
+	public void testEmptyCart_ShouldCheckEmptyCart() throws Exception {
+		Mockito.when(bookService.calculateTotalPrice(Mockito.anyList())).thenReturn(0.0);
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/calculateTotalPrice")
+				.contentType(MediaType.APPLICATION_JSON).content("[]")).andExpect(status().isOk()).andReturn();
+		String responseBody = result.getResponse().getContentAsString();
+		Assertions.assertEquals("0.0", responseBody);
 	}
 }
 
