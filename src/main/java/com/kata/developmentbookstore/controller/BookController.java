@@ -1,6 +1,6 @@
 package com.kata.developmentbookstore.controller;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +12,7 @@ import com.kata.developmentbookstore.model.BookInfo;
 public class BookController {
 
 	@GetMapping("/getAllBooks")
-	public List<BookInfo> getAllBooksEndpoint() {
-		List<BookInfo> books = new ArrayList<>();
-		books.add(new BookInfo("Clean Code", "Robert C. Martin", 2008));
-		books.add(new BookInfo("Clean Coder", "Robert C. Martin", 2011));
-		return books;
-	}
+    public List<BookInfo> getAllBooksEndpoint() {
+	   return Arrays.asList(BookInfo.values());
+    }
 }
