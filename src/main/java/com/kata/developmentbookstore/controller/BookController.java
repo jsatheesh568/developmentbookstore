@@ -15,6 +15,7 @@ public class BookController {
 	public List<BookInfo> getAllBooksEndpoint() {
 		List<BookInfo> books = new ArrayList<>();
 		books.add(new BookInfo("Clean Code", "Robert C. Martin", 2008));
+		books.add(new BookInfo("Clean Coder", "Robert C. Martin", 2011));
 		return books;
 	}
 }

@@ -23,6 +23,7 @@ class DevlopmentBookStoreApplicationTests {
 
 		  BookInfo[] books = {
 	                new BookInfo("Clean Code", "Robert C. Martin", 2008),
+	                new BookInfo("Clean Coder", "Robert C. Martin", 2011)
 	        };
 
 		  mockMvc.perform(MockMvcRequestBuilders.get("/getAllBooks"))
@@ -33,7 +34,10 @@ class DevlopmentBookStoreApplicationTests {
           .andExpect(jsonPath("$.length()").value(books.length))
           .andExpect(jsonPath("$[0].title").value(books[0].getTitle()))
           .andExpect(jsonPath("$[0].author").value(books[0].getAuthor()))
-          .andExpect(jsonPath("$[0].year").value(books[0].getYear()));
+          .andExpect(jsonPath("$[0].year").value(books[0].getYear()))
+          .andExpect(jsonPath("$[1].title").value(books[1].getTitle()))
+          .andExpect(jsonPath("$[1].author").value(books[1].getAuthor()))
+          .andExpect(jsonPath("$[1].year").value(books[1].getYear()));
 }
 
 }
