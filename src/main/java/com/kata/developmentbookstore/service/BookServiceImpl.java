@@ -1,11 +1,12 @@
 package com.kata.developmentbookstore.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.kata.developmentbookstore.constants.BookstoreConstants;
 import com.kata.developmentbookstore.model.Book;
 import com.kata.developmentbookstore.model.BookInfo;
 
@@ -22,41 +23,63 @@ public class BookServiceImpl implements BookService {
 
 	public double calculateTotalPrice(List<Book> selectedBooks) {
 		if (selectedBooks != null && selectedBooks.isEmpty()) {
-			return 0.0;
+			return BookstoreConstants.ZERO;
 		}
-		Map<String, Integer> bookCounts = new HashMap<>();
+		Map<String, Long> bookCountByTitle = selectedBooks.stream()
+				.collect(Collectors.groupingBy(Book::getTitle, Collectors.counting()));
 
-		for (Book book : selectedBooks) {
-			String title = book.getTitle();
-			int count = bookCounts.getOrDefault(title, 0);
-			bookCounts.put(title, count + 1);
-		}
-
-		int distinctBooksInCart = bookCounts.size();
+		int distinctBooksInCart = bookCountByTitle.size();
 		int totalBooksInCart = selectedBooks.size();
-		double totalPrice = 0.0;
-		if (totalBooksInCart == 5 && distinctBooksInCart == 5) {
-			totalPrice += totalBooksInCart * BASE_PRICE * (1 - 25.0 / 100.0);
-		} else if (distinctBooksInCart == 2) {
-			totalPrice += totalBooksInCart * BASE_PRICE * (1 - 5.0 / 100.0);
-		} else if (distinctBooksInCart == 3) {
-			totalPrice += totalBooksInCart * BASE_PRICE * (1 - 10.0 / 100.0);
-		} else if (distinctBooksInCart == 4) {
-			if (totalBooksInCart % 4 == 0) {
-				totalPrice += (totalBooksInCart / 4) * (4 * BASE_PRICE * (1 - 20.0 / 100.0));
-			} else {
-				int completeBookSetsCount = totalBooksInCart / 4;
-				int additionalBooks = totalBooksInCart % 4;
-				totalPrice += (completeBookSetsCount * (3 * BASE_PRICE * (1 - 10.0 / 100.0)))
-						+ (additionalBooks * BASE_PRICE);
+
+		double totalPrice = BookstoreConstants.ZERO;
+		if (distinctBooksInCart == BookstoreConstants.FIVE && totalBooksInCart == BookstoreConstants.FIVE) {
+			totalPrice += totalBooksInCart * BookstoreConstants.BASE_PRICE
+					* (BookstoreConstants.ONE - BookstoreConstants.DISCOUNT_5_BOOKS / BookstoreConstants.HUNDRED);
+		} else if (distinctBooksInCart >= BookstoreConstants.TWO && distinctBooksInCart <= BookstoreConstants.FIVE
+				&& totalBooksInCart > BookstoreConstants.ONE) {
+			switch (distinctBooksInCart) {
+			case 2:
+				totalPrice = calculateDiscountedPrice(totalBooksInCart, BookstoreConstants.DISCOUNT_2_BOOKS);
+				break;
+			case 3:
+				totalPrice = calculateDiscountedPrice(totalBooksInCart, BookstoreConstants.DISCOUNT_3_BOOKS);
+				break;
+			case 4:
+				totalPrice = calculatePriceWithSets(totalBooksInCart, BookstoreConstants.DISCOUNT_4_BOOKS);
+				break;
+			case 5:
+				totalPrice = calculatePriceWithSetsAndAdditionalBooks(totalBooksInCart);
+				break;
+			default:
+				totalPrice = totalBooksInCart * BookstoreConstants.BASE_PRICE;
+				break;
 			}
-		} else if (distinctBooksInCart == 5) {
-			totalPrice += (2 * (4 * BASE_PRICE * (1 - 20.0 / 100.0)))
-					+ (totalBooksInCart - 8) * BASE_PRICE * (1 - 20.0 / 100.0);
 		} else {
-			return totalPrice = totalBooksInCart * BASE_PRICE;
+			totalPrice += totalBooksInCart * BookstoreConstants.BASE_PRICE;
 		}
-		return totalPrice;
+		return Math.floor(totalPrice * BookstoreConstants.HUNDRED) / BookstoreConstants.HUNDRED;
+	}
+
+	private double calculateDiscountedPrice(int totalBooks, double discountPercentage) {
+		return totalBooks * BookstoreConstants.BASE_PRICE * (BookstoreConstants.ONE - discountPercentage / BookstoreConstants.HUNDRED);
+	}
+
+	private double calculatePriceWithSets(int totalBooks, double discountPercentage) {
+		if (totalBooks % BookstoreConstants.FOUR == 0) {
+			return (totalBooks / BookstoreConstants.FOUR) * (BookstoreConstants.FOUR * BookstoreConstants.BASE_PRICE
+					* (BookstoreConstants.ONE - discountPercentage / BookstoreConstants.HUNDRED));
+		} else {
+			int completeBookSetsCount = totalBooks / BookstoreConstants.FOUR;
+			int additionalBooks = totalBooks % BookstoreConstants.FOUR;
+			return (completeBookSetsCount * (BookstoreConstants.THREE * BookstoreConstants.BASE_PRICE
+					* (BookstoreConstants.ONE - discountPercentage / BookstoreConstants.HUNDRED)))
+					+ (additionalBooks * BookstoreConstants.BASE_PRICE);
+		}
+	}
+
+	private double calculatePriceWithSetsAndAdditionalBooks(int totalBooks) {
+		return (BookstoreConstants.TWO * (BookstoreConstants.FOUR * BookstoreConstants.BASE_PRICE * (BookstoreConstants.ONE - BookstoreConstants.DISCOUNT_4_BOOKS / BookstoreConstants.HUNDRED)))
+				+ (totalBooks - BookstoreConstants.EIGHT) * BookstoreConstants.BASE_PRICE * (BookstoreConstants.ONE - BookstoreConstants.DISCOUNT_4_BOOKS / BookstoreConstants.HUNDRED);
 	}
 
 }
