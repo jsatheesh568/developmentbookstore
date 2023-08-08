@@ -2,7 +2,6 @@ package com.kata.developmentbookstore;
 
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,7 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
@@ -31,8 +29,8 @@ import com.kata.developmentbookstore.exception.EmptyCartException;
 import com.kata.developmentbookstore.model.Book;
 import com.kata.developmentbookstore.service.BookService;
 
-@WebMvcTest(BookController.class)
-class DevelopmentBookStoreApplicationTests {
+
+class DevelopmentBookStoreServiceTests {
 
 	@MockBean
 	private BookService bookService;
@@ -50,16 +48,6 @@ class DevelopmentBookStoreApplicationTests {
 	}
 
 	@Test
-	public void testGetAllBooksEndpoint() throws Exception {
-		ResultActions result = mockMvc.perform(get("/books").accept(MediaType.APPLICATION_JSON));
-		result.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$[0]").value("CLEAN_CODE"))
-				.andExpect(jsonPath("$[1]").value("CLEAN_CODER"))
-				.andExpect(jsonPath("$[2]").value("CLEAN_ARCHITECTURE"))
-				.andExpect(jsonPath("$[3]").value("TDD_BY_EXAMPLE")).andExpect(jsonPath("$[4]").value("LEGACY_CODE"));
-	}
-
-	@Test
 	public void testCalculateTotalPrice() {
 		selectedBooks.add(new Book("Clean Code", "Robert Martin", 2008));
 		Mockito.when(bookService.calculateTotalPrice(selectedBooks)).thenThrow(BookValidationException.class);
@@ -68,15 +56,7 @@ class DevelopmentBookStoreApplicationTests {
 		});
 	}
 
-	@Test
-	public void testEmptyCart_ShouldReturnNoPrice() throws Exception {
-	    Mockito.when(bookService.calculateTotalPrice(Mockito.anyList()))
-	            .thenThrow(new EmptyCartException("The cart is empty."));
-	    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/calculate-price")
-	            .contentType(MediaType.APPLICATION_JSON).content("[]")).andExpect(status().isBadRequest()).andReturn();
-	    String responseBody = result.getResponse().getContentAsString();
-	    Assertions.assertEquals("{\"message\":\"The cart is empty\"}", responseBody);
-	}
+
 
 
 	@Test

@@ -17,8 +17,6 @@ import com.kata.developmentbookstore.model.BookInfo;
 
 @Service
 public class BookServiceImpl implements BookService {
-
-	public static final double BASE_PRICE = 50.0;
 	private static final Logger logger = LoggerFactory.getLogger(BookServiceImpl.class);
 	public List<BookInfo> books;
 
