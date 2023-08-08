@@ -5,8 +5,12 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RestControllerAdvice
@@ -24,9 +28,10 @@ public class CustomExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleException(Exception ex) {
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body("An error occurred with book object value.");
+	@ExceptionHandler(HttpMethodNotAllowedException.class)
+	public ResponseEntity<String> handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex) {
+		String errorMessage = "The requested HTTP method is not supported for this resource.";
+		return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorMessage);
 	}
+
 }

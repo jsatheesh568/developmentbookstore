@@ -51,7 +51,7 @@ class DevelopmentBookStoreApplicationTests {
 
 	@Test
 	public void testGetAllBooksEndpoint() throws Exception {
-		ResultActions result = mockMvc.perform(get("/getAllBooks").accept(MediaType.APPLICATION_JSON));
+		ResultActions result = mockMvc.perform(get("/books").accept(MediaType.APPLICATION_JSON));
 		result.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$[0]").value("CLEAN_CODE"))
 				.andExpect(jsonPath("$[1]").value("CLEAN_CODER"))
@@ -72,7 +72,7 @@ class DevelopmentBookStoreApplicationTests {
 	public void testEmptyCart_ShouldReturnNoPrice() throws Exception {
 	    Mockito.when(bookService.calculateTotalPrice(Mockito.anyList()))
 	            .thenThrow(new EmptyCartException("The cart is empty."));
-	    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/calculateTotalPrice")
+	    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/calculate-price")
 	            .contentType(MediaType.APPLICATION_JSON).content("[]")).andExpect(status().isBadRequest()).andReturn();
 	    String responseBody = result.getResponse().getContentAsString();
 	    Assertions.assertEquals("{\"message\":\"The cart is empty\"}", responseBody);

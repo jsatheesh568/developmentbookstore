@@ -1,5 +1,7 @@
 package com.kata.developmentbookstore.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,7 +25,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public List<BookInfo> getAllBooks() {
 		logger.info("Fetching all books");
-		return books;
+		return Arrays.asList(BookInfo.values());
 	}
 
 	public double calculateTotalPrice(List<Book> selectedBooks) {

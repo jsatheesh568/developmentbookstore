@@ -7,16 +7,16 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.kata.developmentbookstore.exception.HttpMethodNotAllowedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.*;
 
 import com.kata.developmentbookstore.exception.BookValidationException;
 import com.kata.developmentbookstore.model.Book;
@@ -25,6 +25,7 @@ import com.kata.developmentbookstore.service.BookService;
 
 @RestController
 @Validated
+@RequestMapping("/development-bookstore/v1")
 public class BookController {
 
 	private final BookService bookService;
@@ -34,13 +35,16 @@ public class BookController {
 		this.bookService = bookService;
 	}
 
-	@GetMapping("/getAllBooks")
-	public List<BookInfo> getAllBooksEndpoint() {
+	@GetMapping("/books")
+	public ResponseEntity<List<BookInfo>> getBooks() {
 		logger.info("Received request to get all books");
-		return Arrays.asList(BookInfo.values());
+		List<BookInfo> books = bookService.getAllBooks();
+		return new ResponseEntity<>(books, HttpStatus.OK);
 	}
 
-	@PostMapping("/calculateTotalPrice")
+
+
+	@PostMapping("/calculate-price")
 	public ResponseEntity<?> calculateTotalPrice(@Valid @RequestBody List<Book> books, BindingResult bindingResult) {
 		logger.info("Received request to calculate total price");
 
