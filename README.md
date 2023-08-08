@@ -1,7 +1,6 @@
 ### DevelopmentBookStore
 
-This short and simple Kata should be performed using Test Driven Development (TDD).
-
+The DevelopmentBookStore is a software application for managing and selling books related to software development.
 
 ## Prerequisites
 * Java 8 or higher
@@ -10,9 +9,14 @@ This short and simple Kata should be performed using Test Driven Development (TD
 
 ### Problem Description:
 
-There is a series of books about software development that have been read by a lot of developers who want to improve their development skills. Let’s say an editor, in a gesture of immense generosity to mankind (and to increase sales as well), is willing to set up a pricing model where you can get discounts when you buy these books. The available books are :
+There is a series of books about software development that have been read by a lot of developers who want to improve their development skills. Let’s say an editor, in a gesture of immense generosity to mankind (and to increase sales as well), is willing to set up a pricing model where you can get discounts when you buy these books. 
 
-Clean Code (Robert Martin, 2008) The Clean Coder (Robert Martin, 2011) Clean Architecture (Robert Martin, 2017) Test Driven Development by Example (Kent Beck, 2003) Working Effectively With Legacy Code (Michael C. Feathers, 2004) Rules The rules are described below :
+*The available books are :*
+ - Clean Code (Robert Martin, 2008)
+ - The Clean Coder (Robert Martin, 2011)
+ - Clean Architecture (Robert Martin, 2017)
+ - Test Driven Development by Example (Kent Beck, 2003) 
+ - Working Effectively With Legacy Code (Michael C. Feathers, 2004).
 
 
 ### Rules:
@@ -32,22 +36,46 @@ For example, how much does this basket of books cost?
 
 = 320 EUR.
 
+## To facilitate the execution of the project, one can adhere to the subsequent steps:
+
+1. **Create a New Spring Boot Project:**
+
+
+  * Use Spring Initializer to create a new Spring Boot project.
+  * Choose the required dependencies: Spring Web, Spring Boot DevTools, Lombok, and H2 Database (for testing).
+
+2. We have to add required dependencies in pom.xml file. Have dependencies like Spring Web MVC, Spring Boot Starter Test, and any other dependencies required for bookstore project.
+
+3. Create the necessary classes for bookstore application, including the controller, service, model, and exception classes.
+
+4. Implement the business logic in the service class and handle exceptions accordingly.
+
+5. Write unit tests for the BookService and BookController classes using JUnit and Mockito.
+
+6. **Enable Swagger Documentation:**
+
+ * Add the necessary dependencies for Swagger in your pom.xml file.
+ * Configure Swagger in your application using @EnableSwagger2 annotation.
+ * Open a web browser and navigate to 'http://localhost:8080/swagger-ui/index.html' .Swagger UI will display the list of available APIs.
+
+7. **Run the Application:**
+
+  * Run the Spring Boot application using your IDE or in command line using this command **'mvn spring-boot:run'**.
+  * Check the console for any errors or warnings during startup.
+
 
 ## Test Scenarios
 
 **Test Get All Books Endpoint**
 
-   Description: Test the API endpoint `/getAllBooks` to retrieve all books from the bookstore.
+   Description: Test the API endpoint `/books` to retrieve all books from the bookstore.
    
 **Test Steps:**
 
-* Send a GET request to `/getAllBooks`.
+* Send a GET request to `/development-bookstore/v1/books`.
 * Verify the response status is `200 OK`.
 * Verify the response content type is `application/json`.
 * Verify the response body contains an array of book names.
-
-
-
 
  **Test Calculate Total Price**
 
@@ -61,24 +89,17 @@ For example, how much does this basket of books cost?
    
    * Assert that invoking `bookService.calculateTotalPrice()` with the list of selected books throws a `BookValidationException`.
 
-
-
 **Test Empty Cart Exception**
-
   
    Description: Test the scenario when the cart is empty and the `calculateTotalPrice()` method throws an `EmptyCartException`.
 
 **Test Steps:**
 
-
    *  Mock the `bookService.calculateTotalPrice()` method to throw an `EmptyCartException`.
    
-   *  Send a POST request to `/calculateTotalPrice` with an empty JSON array as the request body.
-   
-   *  Verify that the response status is `400 Bad Request`.
+   *  Send a POST request to `/development-bookstore/v1/calculate-price` with an empty JSON array as the request body.
    
    * Verify that the response body contains the error message "The cart is empty".
-   
    
 
 
@@ -87,7 +108,6 @@ For example, how much does this basket of books cost?
    Description: Test the price calculation for different scenarios involving various book combinations and discounts.
 
 **Test Cases:**
-
 
    - All different books with no discount.
    - All same books with no discount.
@@ -107,28 +127,5 @@ For example, how much does this basket of books cost?
 
 To run the test cases, execute the following command:
 
-mvn test
+        mvn test
 
-## To execute the project, We can following the below steps:
-
-1. Ensure that you have all the necessary dependencies and configurations set up in your Spring Boot application.
-
-2. Make sure you have the required dependencies in your pom.xml file. You should have dependencies for Spring Web MVC, Spring Boot Starter Test, and any other dependencies required for your project.
-
-3. Create the necessary classes for your application, including the controller, service, model, and exception classes.
-
-4. Implement the business logic in the service class and handle exceptions accordingly.
-
-5. Configure your application properties or application.yaml file with the necessary settings.
-
-6. Create unit tests for your controller and service classes to ensure that they are functioning correctly.
-
-7. Run the application by executing the main() method in the main class of your Spring Boot application.
-
-8. Use tools like Postman to send requests to the defined endpoints and verify the responses.
-
-9. Use the provided test cases to validate the functionality of your application. You can run the tests using a testing framework like JUnit.
-
-10. Review the test results and ensure that all tests pass successfully.
-
-11. Make any necessary adjustments or improvements based on your requirements and retest as needed.
